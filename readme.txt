@@ -31,9 +31,11 @@ install casperjs & phantomjs
 how
 
     casperjs script.js --url="http://localhost" --remote-debugger-port=9000 --remote-debugger-autorunese
+    debug page http://localhost:9000
 
 try
 
     casperjs test js/test.js
-    casperjs js/login-github.js     # 請先編輯裡面的 account/password
+    casperjs js/google-search.js
+    casperjs js/github-login.js     # 請先編輯裡面的 account/password
 
