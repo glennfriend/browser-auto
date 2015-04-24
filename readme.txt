@@ -28,6 +28,11 @@ install casperjs & phantomjs
     sudo ln -s /usr/developer-tool/casperjs/node_modules/casperjs/bin/casperjs  /usr/local/bin/casperjs
     casperjs -v
 
+執行前作業
+
+    $ mkdir tmp
+    $ chmod 777 tmp
+
 how
 
     casperjs script.js --url="http://localhost" --remote-debugger-port=9000 --remote-debugger-autorunese
