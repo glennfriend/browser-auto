@@ -1,4 +1,6 @@
 
+baseLoad();
+
 var casper = require('casper').create({
     viewportSize: {
         width: 1600,
@@ -82,7 +84,7 @@ casper.then(function() {
 
 casper.run(function() {
     echoInfo(this);
-    this.capture("tmp/url-after.png", {
+    this.capture( getProjectPath()+"/tmp/url-after.png", {
         top: 0, left: 0, width: 1600, height: 900
     });
     this
@@ -96,6 +98,16 @@ casper.run(function() {
 /* --------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------- */
+function getProjectPath()
+{
+    return '/var/www/browser-auto';
+}
+
+function baseLoad()
+{
+    phantom.injectJs( getProjectPath() + '/helper/helper.js');
+}
+
 function getConfig()
 {
     /*
@@ -111,64 +123,6 @@ function getConfig()
         password: "密碼",
         adsId:    "your ads ID"
     };
-}
-
-function echo(data)
-{
-    var type = Object.prototype.toString.call(data);
-    switch (type) {
-        case '[object String]':
-            console.log(data);
-            break;
-
-        case '[object Array]':
-            var items = [];
-            for( key in data ) {
-                items.push( data[key] );
-            }
-            content = '[' + items.join(",") + ']';
-            console.log(content);
-            break;
-
-        case '[object Object]':
-            var items = [];
-            for( key in data ) {
-                items.push( key +'='+ data[key] );
-            }
-            content = '{'+ items.join(",") +'}';
-            console.log(content);
-            break;
-
-        default:
-            console.log(type);
-    }
-
-    //console.log(data);
-    //this.echo(data);
-}
-
-function echoInfo(that)
-{
-    // echo( 'time=' + new Date().getTime() );
-    echo('{');
-    echo('    title=' + that.getTitle() );
-    echo('    url=' + that.getCurrentUrl() );
-    echo('}');
-}
-
-/**
- *  列出物件所有的 keys
- *
- *  example:
- *      dumpObjectKeys(this);
- */
-function dumpObjectKeys(object)
-{
-    var keys = [];
-    for( hash in object ) {
-        keys.push(hash);
-    }
-    console.log( keys.join(",") );
 }
 
 /**

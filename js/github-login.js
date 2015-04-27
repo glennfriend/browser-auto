@@ -1,4 +1,6 @@
 
+baseLoad();
+
 var casper = require('casper').create({
     clientScripts:  [
         'lib/jquery-1.11.1.js'
@@ -13,7 +15,7 @@ var casper = require('casper').create({
 var url = casper.cli.raw.get('url') || 'https://github.com/login';
 
 casper.start(url, function() {
-    this.capture("tmp/url-before.png");
+    this.capture( getProjectPath() + "/tmp/url-before.png");
     echoInfo(this);
 });
 
@@ -30,12 +32,16 @@ casper.then(function() {
 });
 
 // redirect to
-// casper.thenOpen('https://github.com/settings/profile');
+/*
+casper.then(function() {
+    this.thenOpen('https://github.com/settings/profile');
+});
+*/
 
 casper.run(function() {
     echoInfo(this);
     this
-        .capture("tmp/url-after.png")
+        .capture( getProjectPath() + "/tmp/url-after.png")
         .echo('==== The End ====')
         .exit();
 });
@@ -46,6 +52,16 @@ casper.run(function() {
 /* --------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------- */
+function getProjectPath()
+{
+    return '/var/www/browser-auto';
+}
+
+function baseLoad()
+{
+    phantom.injectJs( getProjectPath() + '/helper/helper.js');
+}
+
 function getConfig()
 {
     return {
@@ -53,60 +69,3 @@ function getConfig()
         password: "密碼",
     };
 }
-
-function echo(data)
-{
-    var type = Object.prototype.toString.call(data);
-    switch (type) {
-        case '[object String]':
-            console.log(data);
-            break;
-
-        case '[object Array]':
-            var items = [];
-            for( key in data ) {
-                items.push( data[key] );
-            }
-            content = '[' + items.join(",") + ']';
-            console.log(content);
-            break;
-
-        case '[object Object]':
-            var items = [];
-            for( key in data ) {
-                items.push( key +'='+ data[key] );
-            }
-            content = '{'+ items.join(",") +'}';
-            console.log(content);
-            break;
-
-        default:
-            console.log(type);
-    }
-
-    //this.echo(data);
-}
-
-function echoInfo(that)
-{
-    echo('{');
-    echo('    title= ' + that.getTitle() );
-    echo('    url  = ' + that.getCurrentUrl() );
-    echo('}');
-}
-
-/**
- *  列出物件所有的 keys
- *
- *  example:
- *      dumpObjectKeys(this);
- */
-function dumpObjectKeys(object)
-{
-    var keys = [];
-    for( hash in object ) {
-        keys.push(hash);
-    }
-    console.log( keys.join(",") );
-}
-
