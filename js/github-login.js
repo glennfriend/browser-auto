@@ -1,5 +1,6 @@
 
-baseLoad();
+phantom.injectJs( '/var/www/browser-auto/helper/bootstrap.js');
+
 
 var casper = require('casper').create({
     clientScripts:  [
@@ -15,7 +16,7 @@ var casper = require('casper').create({
 var url = casper.cli.raw.get('url') || 'https://github.com/login';
 
 casper.start(url, function() {
-    this.capture( getProjectPath() + "/tmp/url-before.png");
+    this.capture( getProjectPath() + "/var/url-before.png");
     echoInfo(this);
 });
 
@@ -24,7 +25,7 @@ casper.then(function() {
         $('#login_field').val( config.account );
         $('#password').val( config.password );
         $('#login input[name="commit"]').click();
-    }, getConfig() );
+    }, getMyConfig() );
 });
 
 casper.then(function() {
@@ -41,7 +42,7 @@ casper.then(function() {
 casper.run(function() {
     echoInfo(this);
     this
-        .capture( getProjectPath() + "/tmp/url-after.png")
+        .capture( getProjectPath() + "/var/url-after.png")
         .echo('==== The End ====')
         .exit();
 });
@@ -52,17 +53,9 @@ casper.run(function() {
 /* --------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------- */
-function getProjectPath()
-{
-    return '/var/www/browser-auto';
-}
 
-function baseLoad()
-{
-    phantom.injectJs( getProjectPath() + '/helper/helper.js');
-}
 
-function getConfig()
+function getMyConfig()
 {
     return {
         account:  "帳號",

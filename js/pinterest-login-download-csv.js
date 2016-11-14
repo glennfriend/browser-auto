@@ -1,5 +1,6 @@
 
-baseLoad();
+phantom.injectJs( '/var/www/browser-auto/helper/bootstrap.js');
+
 
 var casper = require('casper').create({
     viewportSize: {
@@ -21,7 +22,7 @@ casper.on('resource.received', function (resource) {
         return;
     }
 
-    var config = getConfig();
+    var config = getMyConfig();
     var findString = config.adsId + "/export";
     if ((resource.url.indexOf(findString) !== -1) ) {
         echo('==== download resource: ' + resource.url );
@@ -34,7 +35,7 @@ casper.on('resource.received', function (resource) {
 
         try {
             var fs = require('fs');
-            var pathFile = fs.workingDirectory + '/tmp/' + file
+            var pathFile = fs.workingDirectory + '/var/' + file
             casper.download(resource.url, pathFile );
         } catch (e) {
             echo('Error: ');
@@ -58,7 +59,7 @@ casper.on("page.error", function(msg, trace) {
 // ================================================================================
 
 casper.start(url, function() {
-    this.capture("tmp/url-before.png");
+    this.capture("var/url-before.png");
     echoInfo(this);
 });
 
@@ -67,7 +68,7 @@ casper.then(function() {
         $('input[name="username_or_email"]').val( config.account );
         $('input[name="password"]').val( config.password );
         $('form button[type="submit"]').click();
-    }, getConfig() );
+    }, getMyConfig() );
 });
 
 // redirect to
@@ -76,7 +77,7 @@ casper.thenOpen('https://ads.pinterest.com/');
 // download csv file
 casper.then(function() {
     echo('---- Export CSV ----');
-    var config = getConfig();
+    var config = getMyConfig();
     var from = getYesterday();
     var to   = getToday();
     casper.thenOpen('https://ads.pinterest.com/analytics/advertiser/'+ config.adsId +'/export/?start_date='+ from +'&end_date='+ to );
@@ -84,7 +85,7 @@ casper.then(function() {
 
 casper.run(function() {
     echoInfo(this);
-    this.capture( getProjectPath()+"/tmp/url-after.png", {
+    this.capture( getProjectPath()+"/var/url-after.png", {
         top: 0, left: 0, width: 1600, height: 900
     });
     this
@@ -98,17 +99,7 @@ casper.run(function() {
 /* --------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------- */
-function getProjectPath()
-{
-    return '/var/www/browser-auto';
-}
-
-function baseLoad()
-{
-    phantom.injectJs( getProjectPath() + '/helper/helper.js');
-}
-
-function getConfig()
+function getMyConfig()
 {
     /*
         ads id 來源

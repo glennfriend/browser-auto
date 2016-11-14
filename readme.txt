@@ -26,12 +26,14 @@ install casperjs & phantomjs
 
     npm install casperjs
     sudo ln -s /usr/developer-tool/casperjs/node_modules/casperjs/bin/casperjs  /usr/local/bin/casperjs
-    casperjs -v
+    casperjs --version
 
-執行前作業
+install first
 
-    $ mkdir tmp
-    $ chmod 777 tmp
+    $ mkdir var
+    $ chmod 777 var
+    $ cp config/config.example.json config/config.json
+    $ vi config/config.json
 
 how
 
@@ -43,4 +45,9 @@ try
     casperjs test js/test.js
     casperjs js/google-search.js
     casperjs js/github-login.js     # 請先編輯裡面的 account/password
+
+casperjs 參數
+
+    --ignore-ssl-errors=true
+        忽略 certificate 的問題
 

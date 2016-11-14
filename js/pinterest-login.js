@@ -1,5 +1,5 @@
 
-baseLoad();
+phantom.injectJs( '/var/www/browser-auto/helper/bootstrap.js');
 
 var casper = require('casper').create({
     logLevel: "info",
@@ -12,7 +12,7 @@ var url = casper.cli.raw.get('url') || 'https://www.pinterest.com/login/';
 // ================================================================================
 
 casper.start(url, function() {
-    this.capture( getProjectPath() + "/tmp/url-before.png");
+    this.capture( getProjectPath() + "/var/url-before.png");
     echoInfo(this);
 });
 
@@ -21,7 +21,7 @@ casper.then(function() {
         $('input[name="username_or_email"]').val( config.account );
         $('input[name="password"]').val( config.password );
         $('form button[type="submit"]').click();
-    }, getConfig() );
+    }, getMyConfig() );
 });
 
 // redirect to
@@ -32,7 +32,7 @@ casper.then(function() {
 casper.run(function() {
     echoInfo(this);
 
-    this.capture( getProjectPath() + "/tmp/url-after.png")
+    this.capture( getProjectPath() + "/var/url-after.png")
     this
         .echo('==== The End ====')
         .exit();
@@ -42,17 +42,7 @@ casper.run(function() {
 /* --------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------- */
-function getProjectPath()
-{
-    return '/var/www/browser-auto';
-}
-
-function baseLoad()
-{
-    phantom.injectJs( getProjectPath() + '/helper/helper.js');
-}
-
-function getConfig()
+function getMyConfig()
 {
     return {
         account:  "帳號",

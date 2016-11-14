@@ -1,4 +1,9 @@
 
+var fs = require('fs');
+
+/**
+ *
+ */
 function echo(data)
 {
     var type = Object.prototype.toString.call(data);
@@ -32,11 +37,14 @@ function echo(data)
     //this.echo(data);
 }
 
+/**
+ *
+ */
 function echoInfo(that)
 {
     echo('{');
-    echo('    title= ' + that.getTitle() );
-    echo('    url  = ' + that.getCurrentUrl() );
+    echo('    title = ' + that.getTitle() );
+    echo('    url   = ' + that.getCurrentUrl() );
     echo('}');
 }
 
@@ -55,3 +63,27 @@ function dumpObjectKeys(object)
     console.log( keys.join(",") );
 }
 
+/**
+ *
+ */
+function getProjectPath(path)
+{
+    var basePath = '/var/www/browser-auto';
+    if (path) {
+        return basePath + path;
+    }
+    return basePath;
+}
+
+/**
+ *  get configs
+ *
+ *  @depend fs
+ *  @return object
+ */
+function getConfig()
+{
+    var configPath = getProjectPath('/config/config.json');
+    var text = fs.read(configPath);
+    return JSON.parse(text);
+}
